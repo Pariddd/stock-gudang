@@ -27,4 +27,16 @@ class StoreStockInRequest extends FormRequest
             'description' => 'nullable|string|max:500',
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'product_id.required' => 'Barang wajib dipilih.',
+            'product_id.exists' => 'Barang tidak ditemukan.',
+            'qty.required' => 'Jumlah barang masuk wajib diisi.',
+            'qty.integer' => 'Jumlah barang masuk harus berupa angka.',
+            'qty.min' => 'Jumlah barang minimal 1',
+            'description.max' => 'Deskripsi maksimal 255 karakter.',
+        ];
+    }
 }
