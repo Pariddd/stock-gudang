@@ -10,6 +10,14 @@ use Illuminate\Support\Facades\DB;
 
 class StockInController extends Controller
 {
+    public function index()
+    {
+        $products = Product::orderBy('name')->get();
+        $stockIns = StockIn::with('product')->latest()->get();
+
+        return view('stock_in.index', compact('products', 'stockIns'));
+    }
+
     public function store(StoreStockInRequest $request)
     {
         $data = $request->validated();
@@ -26,6 +34,8 @@ class StockInController extends Controller
             $product->increment('stock', $data['qty']);
         });
 
-        return redirect()->back()->with('success', 'Barang masuk berhasil ditambahkan.');
+        return redirect()
+            ->route('products.index')
+            ->with('success', 'Barang masuk berhasil ditambahkan');
     }
 }

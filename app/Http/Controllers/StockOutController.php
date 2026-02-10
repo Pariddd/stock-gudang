@@ -10,6 +10,13 @@ use Illuminate\Support\Facades\DB;
 
 class StockOutController extends Controller
 {
+    public function index()
+    {
+        return redirect()
+            ->route('products.index')
+            ->with('success', 'Barang keluar berhasil ditambahkan');
+    }
+
     public function store(StoreStockOutRequest $request)
     {
         $data = $request->validated();
