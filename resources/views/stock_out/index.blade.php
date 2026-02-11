@@ -1,30 +1,65 @@
-<h2>Barang Keluar</h2>
+@extends('layouts.app')
+
+@section('content')
+
+<h1 class="text-2xl font-bold mb-6">Barang Keluar</h1>
 
 @if (session('success'))
-    <p style="color:green">{{ session('success') }}</p>
+    <div class="mb-4 p-3 rounded bg-green-100 text-green-700">
+        {{ session('success') }}
+    </div>
 @endif
 
 @if ($errors->any())
-    <p style="color:red">{{ $errors->first() }}</p>
+    <div class="mb-4 p-3 rounded bg-red-100 text-red-700">
+        {{ $errors->first() }}
+    </div>
 @endif
 
-<form action="{{ route('stock-out.store') }}" method="POST">
-    @csrf
+<div class="bg-white rounded-lg shadow max-w-xl">
+    <div class="p-5 border-b">
+        <h2 class="text-lg font-semibold">Kurangi Barang</h2>
+    </div>
 
-    <label>Produk</label>
-    <select name="product_id">
-        @foreach ($products as $product)
-            <option value="{{ $product->id }}">
-                {{ $product->name }} (stok: {{ $product->stock }})
-            </option>
-        @endforeach
-    </select>
-
-    <label>Jumlah</label>
-    <input type="number" name="qty" min="1">
-
-    <label>Keterangan</label>
-    <input type="text" name="description">
-
-    <button type="submit">Kurangi</button>
-</form>
+    <form action="{{ route('stock-out.store') }}" method="POST" class="p-5 space-y-4">
+        @csrf
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+                Produk
+            </label>
+            <select name="product_id"
+                    class="w-full border-gray-300 rounded focus:ring focus:ring-slate-200">
+                @foreach ($products as $product)
+                    <option value="{{ $product->id }}">
+                        {{ $product->name }} (stok: {{ $product->stock }})
+                    </option>
+                @endforeach
+            </select>
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+                Jumlah
+            </label>
+            <input type="number"
+                   name="qty"
+                   min="1"
+                   class="w-full border-gray-300 rounded focus:ring focus:ring-slate-200">
+        </div>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+                Keterangan
+            </label>
+            <input type="text"
+                   name="description"
+                   placeholder="Contoh: penjualan / pemakaian"
+                   class="w-full border-gray-300 rounded focus:ring focus:ring-slate-200">
+        </div>
+        <div class="flex justify-end">
+            <button type="submit"
+                    class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                Kurangi Barang
+            </button>
+        </div>
+    </form>
+</div>
+@endsection
