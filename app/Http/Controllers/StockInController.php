@@ -35,7 +35,7 @@ class StockInController extends Controller
         });
 
         return redirect()
-            ->route('products.index')
+            ->route('dashboard.products.index')
             ->with('success', 'Barang masuk berhasil ditambahkan');
     }
 }

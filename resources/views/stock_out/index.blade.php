@@ -21,7 +21,7 @@
         <h2 class="text-lg font-semibold">Kurangi Barang</h2>
     </div>
 
-    <form action="{{ route('stock-out.store') }}" method="POST" class="p-5 space-y-4">
+    <form action="{{ route('dashboard.stock-out.store') }}" method="POST" class="p-5 space-y-4">
         @csrf
         <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">

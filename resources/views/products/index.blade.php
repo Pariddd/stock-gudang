@@ -8,7 +8,7 @@
                 <h1 class="text-xl md:text-2xl font-bold text-gray-800">Daftar Barang</h1>
                 <p class="text-gray-600 text-xs md:text-sm mt-1">Kelola semua produk inventory</p>
             </div>
-            <a href="{{ route('products.create') }}" 
+            <a href="{{ route('dashboard.products.create') }}" 
                class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors duration-200 text-sm md:text-base">
                 <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
@@ -139,7 +139,7 @@
             sort_direction: sortDirection
         });
 
-        fetch(`{{ route('products.fetch') }}?${params}`)
+        fetch(`{{ route('dashboard.products.fetch') }}?${params}`)
             .then(response => response.json())
             .then(data => {
                 renderTable(data.data);

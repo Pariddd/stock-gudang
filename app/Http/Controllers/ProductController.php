@@ -61,7 +61,7 @@ class ProductController extends Controller
 
         Product::create($data);
 
-        return redirect()->route('products.index')
+        return redirect()->route('dashboard.products.index')
             ->with('success', 'Barang berhasil ditambahkan');
     }
 
@@ -87,18 +87,18 @@ class ProductController extends Controller
 
         $product->update($data);
 
-        return redirect()->route('products.index')
+        return redirect()->route('dashboard.products.index')
             ->with('success', 'Barang berhasil diganti');
     }
 
     public function destroy(Product $product)
     {
         if ($product->stock > 0) {
-            return redirect()->route('products.index')->with('error', 'Barang Masih Memiliki Stok.');
+            return redirect()->route('dashboard.products.index')->with('error', 'Barang Masih Memiliki Stok.');
         }
 
         $product->delete();
 
-        return redirect()->route('products.index')->with('success', 'Barang berhasil dihapus.');
+        return redirect()->route('dashboard.products.index')->with('success', 'Barang berhasil dihapus.');
     }
 }

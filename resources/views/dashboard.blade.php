@@ -2,17 +2,11 @@
 
 @section('content')
 <div class="max-w-7xl mx-auto">
-    
-    <!-- Header -->
     <div class="mb-8">
         <h1 class="text-3xl font-bold text-blue-900" >Profile Statistics</h1>
     </div>
-
-    <!-- Stats Grid -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-
-        <!-- Total Produk Card -->
-        <a href="{{ route('products.index') }}"
+        <a href="{{ route('dashboard.products.index') }}"
            class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 group">
             <div class="flex items-start justify-between mb-3">
                 <div class="p-3 bg-blue-50 rounded-lg group-hover:bg-blue-100 transition-colors duration-300">
@@ -28,9 +22,7 @@
                 {{ $totalProducts }}
             </p>
         </a>
-
-        <!-- Total Stok Card -->
-        <a href="{{ route('products.index') }}"
+        <a href="{{ route('dashboard.products.index') }}"
            class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 group">
             <div class="flex items-start justify-between mb-3">
                 <div class="p-3 bg-purple-50 rounded-lg group-hover:bg-purple-100 transition-colors duration-300">
@@ -46,9 +38,7 @@
                 {{ $totalStock }}
             </p>
         </a>
-
-        <!-- Barang Masuk Card -->
-        <a href="{{ route('stock-in.index') }}"
+        <a href="{{ route('dashboard.stock-in.index') }}"
            class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 group">
             <div class="flex items-start justify-between mb-3">
                 <div class="p-3 bg-green-50 rounded-lg group-hover:bg-green-100 transition-colors duration-300">
@@ -64,9 +54,7 @@
                 {{ $stockInToday }}
             </p>
         </a>
-
-        <!-- Barang Keluar Card -->
-        <a href="{{ route('stock-out.index') }}"
+        <a href="{{ route('dashboard.stock-out.index') }}"
            class="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 group">
             <div class="flex items-start justify-between mb-3">
                 <div class="p-3 bg-red-50 rounded-lg group-hover:bg-red-100 transition-colors duration-300">

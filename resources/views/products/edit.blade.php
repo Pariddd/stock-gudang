@@ -4,7 +4,7 @@
 
 <div class="max-w-2xl mx-auto">
     <div class="mb-4">
-        <a href="{{ route('products.index') }}"
+        <a href="{{ route('dashboard.products.index') }}"
         class="inline-flex items-center gap-2 px-4 py-2 bg-blue-700 text-white text-sm font-medium rounded-lg hover:bg-blue-900 transition">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -16,7 +16,7 @@
     <div class="bg-white shadow rounded-lg p-6">
         <h1 class="text-xl font-bold mb-6">Edit Produk</h1>
         <form method="POST"
-              action="{{ route('products.update', $product) }}"
+              action="{{ route('dashboard.products.update', $product) }}"
               enctype="multipart/form-data"
               class="space-y-5">
             @csrf
