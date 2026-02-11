@@ -2,8 +2,6 @@
 
 @section('content')
 <div class="w-full">
-    
-    <!-- Header -->
     <div class="mb-4 md:mb-6">
         <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div>
@@ -19,15 +17,9 @@
             </a>
         </div>
     </div>
-
-    <!-- Table Card -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-        
-        <!-- Table Controls - Responsive, tidak scroll -->
         <div class="p-3 md:p-4 border-b border-gray-200">
             <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                
-                <!-- Left: Pagination Dropdown -->
                 <div class="flex items-center gap-2 text-xs md:text-sm">
                     <label class="text-gray-600 whitespace-nowrap">Show</label>
                     <select id="perPageSelect" 
@@ -40,8 +32,6 @@
                     </select>
                     <label class="text-gray-600 whitespace-nowrap">entries</label>
                 </div>
-
-                <!-- Right: Search Bar -->
                 <div class="relative w-full md:w-auto">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <svg class="w-4 h-4 md:w-5 md:h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -55,16 +45,17 @@
                 </div>
             </div>
         </div>
-
-        <!-- Table Wrapper - HANYA INI YANG BISA SCROLL HORIZONTAL -->
         <div class="w-full overflow-x-auto">
-            <table class="min-w-200 w-full text-xs md:text-sm">
+            <table class="min-w-[900] w-full text-xs md:text-sm">
                 <thead class="bg-gray-50 border-b border-gray-200">
                     <tr>
                         <th class="px-3 md:px-6 py-2 md:py-3 text-left font-semibold text-gray-700">
+                            Gambar
+                        </th>
+                        <th class="px-3 md:px-6 py-2 md:py-3 text-left font-semibold text-gray-700">
                             <button onclick="toggleSort('name')" class="flex items-center gap-1 md:gap-2 hover:text-blue-700 transition-colors whitespace-nowrap">
                                 <span>Nama</span>
-                                <span id="sort-icon-name" class="sort-icon flex-shrink-0">
+                                <span id="sort-icon-name" class="sort-icon shrink-0">
                                     <svg class="w-3 h-3 md:w-4 md:h-4 opacity-50" fill="currentColor" viewBox="0 0 20 20">
                                         <path d="M5 8l5-5 5 5H5zM5 12l5 5 5-5H5z"/>
                                     </svg>
@@ -74,7 +65,7 @@
                         <th class="px-3 md:px-6 py-2 md:py-3 text-left font-semibold text-gray-700">
                             <button onclick="toggleSort('category')" class="flex items-center gap-1 md:gap-2 hover:text-blue-700 transition-colors whitespace-nowrap">
                                 <span>Kategori</span>
-                                <span id="sort-icon-category" class="sort-icon flex-shrink-0">
+                                <span id="sort-icon-category" class="sort-icon shrink-0">
                                     <svg class="w-3 h-3 md:w-4 md:h-4 opacity-50" fill="currentColor" viewBox="0 0 20 20">
                                         <path d="M5 8l5-5 5 5H5zM5 12l5 5 5-5H5z"/>
                                     </svg>
@@ -84,7 +75,7 @@
                         <th class="px-3 md:px-6 py-2 md:py-3 text-left font-semibold text-gray-700">
                             <button onclick="toggleSort('stock')" class="flex items-center gap-1 md:gap-2 hover:text-blue-700 transition-colors whitespace-nowrap">
                                 <span>Stok</span>
-                                <span id="sort-icon-stock" class="sort-icon flex-shrink-0">
+                                <span id="sort-icon-stock" class="sort-icon shrink-0">
                                     <svg class="w-3 h-3 md:w-4 md:h-4 opacity-50" fill="currentColor" viewBox="0 0 20 20">
                                         <path d="M5 8l5-5 5 5H5zM5 12l5 5 5-5H5z"/>
                                     </svg>
@@ -96,23 +87,15 @@
                     </tr>
                 </thead>
                 <tbody id="tableBody" class="divide-y divide-gray-200 bg-white">
-                    <!-- Data will be loaded here via AJAX -->
                 </tbody>
             </table>
         </div>
-
-        <!-- Pagination Footer - Responsive, tidak scroll -->
         <div class="p-3 md:p-4 border-t border-gray-200">
             <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                
-                <!-- Info Text -->
                 <div id="paginationInfo" class="text-xs md:text-sm text-gray-600 text-center md:text-left">
                     Loading...
                 </div>
-
-                <!-- Pagination Links -->
                 <div id="paginationLinks" class="flex justify-center md:justify-end">
-                    <!-- Pagination will be loaded here -->
                 </div>
             </div>
         </div>
@@ -121,7 +104,6 @@
 </div>
 
 <script>
-    // State management
     let currentPage = 1;
     let perPage = 10;
     let search = '';
@@ -129,11 +111,9 @@
     let sortDirection = 'desc';
     let searchTimeout;
 
-    // Initialize on page load
     document.addEventListener('DOMContentLoaded', function() {
         fetchProducts();
 
-        // Event listeners
         document.getElementById('perPageSelect').addEventListener('change', function(e) {
             perPage = e.target.value;
             currentPage = 1;
@@ -207,6 +187,16 @@
             
             return `
                 <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="px-3 md:px-6 py-3 md:py-4 whitespace-nowrap">
+                        ${
+                            product.image 
+                            ? `<img src="/storage/${product.image}" 
+                                    class="w-22 h-22 object-cover rounded-lg border border-gray-200">`
+                            : `<div class="w-22 h-22 bg-gray-100 flex items-center justify-center rounded-lg text-gray-400 text-md">
+                                    No Img
+                            </div>`
+                        }
+                    </td>
                     <td class="px-3 md:px-6 py-3 md:py-4 font-medium text-gray-800 whitespace-nowrap">
                         ${product.name}
                     </td>
@@ -251,23 +241,19 @@
     }
 
     function renderPagination(data) {
-        // Update info text
         document.getElementById('paginationInfo').textContent = 
             `Showing ${data.from || 0} to ${data.to || 0} of ${data.total} entries`;
 
-        // Create pagination links
         const paginationLinks = document.getElementById('paginationLinks');
         let html = '<nav role="navigation" aria-label="Pagination Navigation" class="flex items-center gap-1 md:gap-2">';
 
-        // Previous button
         if (data.current_page > 1) {
             html += `<button onclick="changePage(${data.current_page - 1})" class="px-2 md:px-3 py-1 md:py-1.5 text-xs md:text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">Prev</button>`;
         } else {
             html += `<span class="px-2 md:px-3 py-1 md:py-1.5 text-xs md:text-sm text-gray-400 bg-gray-100 rounded-lg cursor-not-allowed">Prev</span>`;
         }
 
-        // Page numbers
-        const maxPages = window.innerWidth < 768 ? 3 : 5; // 3 pages on mobile, 5 on desktop
+        const maxPages = window.innerWidth < 768 ? 3 : 5;
         let startPage = Math.max(1, data.current_page - Math.floor(maxPages / 2));
         let endPage = Math.min(data.last_page, startPage + maxPages - 1);
 
@@ -282,8 +268,6 @@
                 html += `<button onclick="changePage(${i})" class="px-2 md:px-3 py-1 md:py-1.5 text-xs md:text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">${i}</button>`;
             }
         }
-
-        // Next button
         if (data.current_page < data.last_page) {
             html += `<button onclick="changePage(${data.current_page + 1})" class="px-2 md:px-3 py-1 md:py-1.5 text-xs md:text-sm text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">Next</button>`;
         } else {
@@ -300,7 +284,6 @@
     }
 
     function toggleSort(column) {
-        // Map display column to database column
         const columnMap = {
             'name': 'name',
             'category': 'category_id',
@@ -320,7 +303,6 @@
     }
 
     function updateSortIcons() {
-        // Reset all icons
         document.querySelectorAll('.sort-icon').forEach(icon => {
             icon.innerHTML = `
                 <svg class="w-3 h-3 md:w-4 md:h-4 opacity-50" fill="currentColor" viewBox="0 0 20 20">
@@ -329,7 +311,6 @@
             `;
         });
 
-        // Update active sort icon
         const columnMap = {
             'name': 'name',
             'category_id': 'category',
@@ -358,7 +339,7 @@
     }
 
     function confirmDelete(event) {
-        return confirm('⚠️ Peringatan!\n\nBarang dengan stok > 0 tidak dapat dihapus.\nPastikan stok barang sudah 0 sebelum menghapus.\n\nYakin ingin menghapus barang ini?');
+        return confirm('Pastikan Barang sudah Kosong sebelum di Hapus.');
     }
 </script>
 @endsection
