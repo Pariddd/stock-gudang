@@ -4,7 +4,7 @@
 <div class="max-w-2xl mx-auto">
     <div class="mb-4">
         <a href="{{ route('products.index') }}"
-           class="inline-flex items-center gap-2 text-sm text-blue-700 hover:text-blue-900">
+           class="inline-flex items-center gap-2 px-4 py-2 bg-blue-700 text-white text-sm font-medium rounded-lg hover:bg-blue-900 transition">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M15 19l-7-7 7-7"/>
@@ -86,6 +86,16 @@
                             Klik atau drag ulang untuk mengganti
                         </p>
                     </div>
+                    <div id="image-error" class="hidden mt-3 items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                        <svg class="w-4 h-4 text-red-600 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-11h2v5H9V7zm0 6h2v2H9v-2z"
+                                clip-rule="evenodd"/>
+                        </svg>
+                        <span id="image-error-text"
+                            class="text-sm text-red-700 font-medium">
+                        </span>
+                    </div>
                 </div>
             </div>
             <div class="flex justify-end">
@@ -104,28 +114,60 @@
     const previewContainer = document.getElementById('preview-container');
     const uploadText = document.getElementById('upload-text');
     const removeButton = document.getElementById('remove-image');
+    const imageError = document.getElementById('image-error');
+    const imageErrorText = document.getElementById('image-error-text');
 
     fileInput.addEventListener('change', function () {
         const file = this.files[0];
 
-        if (file) {
-            const reader = new FileReader();
+        if (!file) return;
 
-            reader.onload = function (e) {
-                previewImage.src = e.target.result;
-                previewContainer.classList.remove('hidden');
-                uploadText.classList.add('hidden');
-            };
+        const maxSize = 2 * 1024 * 1024; // 2MB
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
 
-            reader.readAsDataURL(file);
+        imageError.classList.add('hidden');
+        imageErrorText.textContent = '';
+
+        if (!allowedTypes.includes(file.type)) {
+            showImageError('Format gambar harus JPG, PNG, atau WEBP.');
+            fileInput.value = '';
+            return;
         }
+
+        if (file.size > maxSize) {
+            showImageError('Ukuran gambar maksimal 2MB.');
+            fileInput.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            previewImage.src = e.target.result;
+            previewContainer.classList.remove('hidden');
+            uploadText.classList.add('hidden');
+        };
+
+        reader.readAsDataURL(file);
     });
 
+    function showImageError(message) {
+        imageErrorText.textContent = message;
+
+        imageError.classList.remove('hidden');
+        imageError.classList.add('flex');
+    }
+
+
     removeButton.addEventListener('click', function () {
-        fileInput.value = ''; // reset input file
+        fileInput.value = '';
         previewImage.src = '';
         previewContainer.classList.add('hidden');
         uploadText.classList.remove('hidden');
+
+        imageError.classList.add('hidden');
+        imageErrorText.textContent = '';
     });
+
 </script>
 @endsection
