@@ -88,7 +88,7 @@ class ProductController extends Controller
         $product->update($data);
 
         return redirect()->route('products.index')
-            ->with('success', 'Produk berhasil diganti');
+            ->with('success', 'Barang berhasil diganti');
     }
 
     public function destroy(Product $product)
