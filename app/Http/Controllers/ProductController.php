@@ -11,9 +11,36 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::with('category')->latest()->paginate(10);
+        return view('products.index');
+    }
 
-        return view('products.index', compact('products'));
+    public function fetch(Request $request)
+    {
+        $perPage = $request->get('per_page', 10);
+        $search = $request->get('search', '');
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortDirection = $request->get('sort_direction', 'desc');
+
+        $products = Product::with('category')
+            ->when($search, function ($query, $search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhereHas('category', function ($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%");
+                    });
+            })
+            ->orderBy($sortBy, $sortDirection)
+            ->paginate($perPage);
+
+        return response()->json([
+            'data' => $products->items(),
+            'current_page' => $products->currentPage(),
+            'last_page' => $products->lastPage(),
+            'per_page' => $products->perPage(),
+            'total' => $products->total(),
+            'from' => $products->firstItem(),
+            'to' => $products->lastItem(),
+            'links' => $products->links('vendor.pagination.tailwind')->render()
+        ]);
     }
 
     public function create()
