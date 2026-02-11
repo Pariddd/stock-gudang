@@ -6,6 +6,7 @@ use App\Http\Requests\StoreProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -51,9 +52,17 @@ class ProductController extends Controller
 
     public function store(StoreProductRequest $request)
     {
-        Product::create($request->validated());
+        $data = $request->validated();
 
-        return redirect()->route('products.index')->with('success', 'Barang berhasil ditambahkan.');
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')
+                ->store('products', 'public');
+        }
+
+        Product::create($data);
+
+        return redirect()->route('products.index')
+            ->with('success', 'Barang berhasil ditambahkan');
     }
 
     public function edit(Product $product)
@@ -64,9 +73,22 @@ class ProductController extends Controller
 
     public function update(StoreProductRequest $request, Product $product)
     {
-        $product->update($request->validated());
+        $data = $request->validated();
 
-        return redirect()->route('products.index')->with('success', 'Barang berhasil diperbarui.');
+        if ($request->hasFile('image')) {
+
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image);
+            }
+
+            $data['image'] = $request->file('image')
+                ->store('products', 'public');
+        }
+
+        $product->update($data);
+
+        return redirect()->route('products.index')
+            ->with('success', 'Produk berhasil diganti');
     }
 
     public function destroy(Product $product)
