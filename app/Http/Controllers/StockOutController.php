@@ -12,9 +12,10 @@ class StockOutController extends Controller
 {
     public function index()
     {
-        return redirect()
-            ->route('products.index')
-            ->with('success', 'Barang keluar berhasil ditambahkan');
+        $products = Product::orderBy('name')->get();
+        $stockOuts = StockOut::with('product')->latest()->get();
+
+        return view('stock_out.index', compact('products', 'stockOuts'));
     }
 
     public function store(StoreStockOutRequest $request)
@@ -38,6 +39,8 @@ class StockOutController extends Controller
         });
 
 
-        return redirect()->back()->with('success', 'Barang keluar berhasil disimpan');
+        return redirect()
+            ->route('products.index')
+            ->with('success', 'Barang keluar berhasil ditambahkan');
     }
 }
