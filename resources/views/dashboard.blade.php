@@ -70,14 +70,77 @@
                 {{ $stockOutToday }}
             </p>
         </a>
-
     </div>
     <div class="mt-8 grid grid-cols-1">
         <div class="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
             <h2 class="text-lg font-bold text-gray-800 mb-4">Histori Barang Masuk/Keluar</h2>
-            <div class="space-y-3">
-                <p class="text-gray-500 text-sm">Belum ada aktivitas hari ini</p>
-            </div>
+            <div class="w-full overflow-x-auto">
+            <table class="min-w-225 w-full text-xs md:text-sm">
+                <thead class="bg-gray-50 border-b border-gray-200">
+                    <tr>
+                        <th class="px-6 py-3 text-left font-semibold text-gray-700">
+                            Produk
+                        </th>
+                        <th class="px-6 py-3 text-left font-semibold text-gray-700">
+                            Tipe
+                        </th>
+                        <th class="px-6 py-3 text-left font-semibold text-gray-700">
+                            Qty
+                        </th>
+                        <th class="px-6 py-3 text-left font-semibold text-gray-700">
+                            Stok Sebelum
+                        </th>
+                        <th class="px-6 py-3 text-left font-semibold text-gray-700">
+                            Stok Sesudah
+                        </th>
+                        <th class="px-6 py-3 text-left font-semibold text-gray-700">
+                            Keterangan
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 bg-white">
+                    @forelse ($histories as $history)
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-800">
+                                {{ $history->product->name }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @if($history->type === 'masuk')
+                                    <span class="inline-flex items-center px-2.5 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700">
+                                        Masuk
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center px-2.5 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-700">
+                                        Keluar
+                                    </span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap font-semibold">
+                                {{ $history->qty }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-600">
+                                {{ $history->stock_before }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-600">
+                                {{ $history->stock_after }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-600">
+                                {{ $history->description ?? '-' }}
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="px-6 py-12 text-center text-gray-500">
+                                Belum ada riwayat transaksi
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        <div class="p-4 border-t border-gray-200">
+            {{ $histories->links() }}
+        </div>
         </div>
     </div>
 </div>

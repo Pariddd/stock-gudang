@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\StockHistory;
 use App\Models\StockIn;
 use App\Models\StockOut;
 use Illuminate\Http\Request;
@@ -19,6 +20,8 @@ class DashboardController extends Controller
         $stockOutToday = StockOut::whereDate('created_at', today())
             ->sum('qty');
 
-        return view('dashboard', compact('totalProducts', 'totalStock', 'stockInToday', 'stockOutToday'));
+        $histories = StockHistory::with('product')->whereDate('created_at', today())->latest()->paginate(15);
+
+        return view('dashboard', compact('totalProducts', 'totalStock', 'stockInToday', 'stockOutToday', 'histories'));
     }
 }
