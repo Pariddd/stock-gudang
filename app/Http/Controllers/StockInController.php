@@ -35,7 +35,25 @@ class StockInController extends Controller
         });
 
         return redirect()
-            ->route('dashboard.products.index')
+            ->route('dashboard.stock-in.index')
             ->with('success', 'Barang masuk berhasil ditambahkan');
+    }
+
+    public function searchProducts(Request $request)
+    {
+        $search = $request->get('search', '');
+
+        $products = Product::with('category')
+            ->when($search, function ($query, $search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhereHas('category', function ($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%");
+                    });
+            })
+            ->orderBy('name')
+            ->limit(10)
+            ->get(['id', 'name', 'stock', 'satuan', 'category_id']);
+
+        return response()->json($products);
     }
 }
