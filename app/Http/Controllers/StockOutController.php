@@ -25,10 +25,6 @@ class StockOutController extends Controller
         DB::transaction(function () use ($data) {
             $product = Product::lockForUpdate()->findOrFail($data['product_id']);
 
-            if ($product->stock < $data['qty']) {
-                abort(400, 'Stok tidak mencukupi');
-            }
-
             StockOut::create([
                 'product_id' => $product->id,
                 'qty' => $data['qty'],
@@ -38,9 +34,27 @@ class StockOutController extends Controller
             $product->decrement('stock', $data['qty']);
         });
 
-
         return redirect()
-            ->route('dashboard.products.index')
-            ->with('success', 'Barang keluar berhasil ditambahkan');
+            ->route('dashboard.stock-out.index')
+            ->with('success', 'Barang keluar berhasil dicatat');
+    }
+
+    public function searchProducts(Request $request)
+    {
+        $search = $request->get('search', '');
+
+        $products = Product::with('category')
+            ->where('stock', '>', 0)
+            ->when($search, function ($query, $search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhereHas('category', function ($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%");
+                    });
+            })
+            ->orderBy('name')
+            ->limit(10)
+            ->get(['id', 'name', 'stock', 'satuan', 'category_id']);
+
+        return response()->json($products);
     }
 }
