@@ -20,15 +20,9 @@ Route::prefix('dashboard')->name('dashboard.')->group(function () {
 
     Route::resource('categories', CategoryController::class);
 
-    Route::get('stock-in', [StockInController::class, 'index'])
-        ->name('stock-in.index');
+    Route::get('stock-in/search-products', [StockInController::class, 'searchProducts'])->name('stock-in.search-products');
+    Route::resource('stock-in', StockInController::class);
 
-    Route::post('stock-in', [StockInController::class, 'store'])
-        ->name('stock-in.store');
-
-    Route::get('stock-out', [StockOutController::class, 'index'])
-        ->name('stock-out.index');
-
-    Route::post('stock-out', [StockOutController::class, 'store'])
-        ->name('stock-out.store');
+    Route::get('/stock-out/search-products', [StockOutController::class, 'searchProducts'])->name('stock-out.search-products');
+    Route::resource('stock-out', StockOutController::class);
 });
