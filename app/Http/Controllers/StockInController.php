@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreStockInRequest;
 use App\Models\Product;
+use App\Models\StockHistory;
 use App\Models\StockIn;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -23,7 +24,11 @@ class StockInController extends Controller
         $data = $request->validated();
 
         DB::transaction(function () use ($data) {
-            $product = Product::lockforUpdate()->findOrFail($data['product_id']);
+
+            $product = Product::lockForUpdate()->findOrFail($data['product_id']);
+
+            $before = $product->stock;
+            $after  = $before + $data['qty'];
 
             StockIn::create([
                 'product_id' => $product->id,
@@ -32,6 +37,15 @@ class StockInController extends Controller
             ]);
 
             $product->increment('stock', $data['qty']);
+
+            StockHistory::create([
+                'product_id' => $product->id,
+                'type' => 'in',
+                'qty' => $data['qty'],
+                'stock_before' => $before,
+                'stock_after' => $after,
+                'description' => $data['description'] ?? null,
+            ]);
         });
 
         return redirect()

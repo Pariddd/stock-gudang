@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreStockOutRequest;
 use App\Models\Product;
+use App\Models\StockHistory;
 use App\Models\StockOut;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -25,6 +26,9 @@ class StockOutController extends Controller
         DB::transaction(function () use ($data) {
             $product = Product::lockForUpdate()->findOrFail($data['product_id']);
 
+            $before = $product->stock;
+            $after  = $before - $data['qty'];
+
             StockOut::create([
                 'product_id' => $product->id,
                 'qty' => $data['qty'],
@@ -32,6 +36,15 @@ class StockOutController extends Controller
             ]);
 
             $product->decrement('stock', $data['qty']);
+
+            StockHistory::create([
+                'product_id' => $product->id,
+                'type' => 'out',
+                'qty' => $data['qty'],
+                'stock_before' => $before,
+                'stock_after' => $after,
+                'description' => $data['description'] ?? null,
+            ]);
         });
 
         return redirect()
