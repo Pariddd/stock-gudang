@@ -40,7 +40,7 @@ class StockInController extends Controller
 
             StockHistory::create([
                 'product_id' => $product->id,
-                'type' => 'in',
+                'type' => 'masuk',
                 'qty' => $data['qty'],
                 'stock_before' => $before,
                 'stock_after' => $after,

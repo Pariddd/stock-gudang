@@ -39,7 +39,7 @@ class StockOutController extends Controller
 
             StockHistory::create([
                 'product_id' => $product->id,
-                'type' => 'out',
+                'type' => 'keluar',
                 'qty' => $data['qty'],
                 'stock_before' => $before,
                 'stock_after' => $after,
