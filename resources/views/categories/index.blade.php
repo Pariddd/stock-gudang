@@ -36,7 +36,6 @@
                         </th>
                     </tr>
                 </thead>
-
                 <tbody class="divide-y divide-gray-200 bg-white">
                     @forelse ($categories as $category)
                         <tr class="hover:bg-gray-50 transition-colors">
