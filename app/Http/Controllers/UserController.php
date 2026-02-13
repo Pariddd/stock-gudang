@@ -36,4 +36,32 @@ class UserController extends Controller
             ->route('dashboard.users.index')
             ->with('success', 'User berhasil dibuat.');
     }
+
+    public function edit(User $user)
+    {
+        return view('users.edit', compact('user'));
+    }
+
+    public function update(Request $request, User $user)
+    {
+        $request->validate([
+            'name' => 'required|unique:users,name,' . $user->id,
+            'password' => 'nullable|min:8',
+            'role' => 'required|in:admin,staff',
+        ]);
+
+        $user->update([
+            'name' => $request->name,
+            'role' => $request->role,
+        ]);
+
+        if ($request->filled('password')) {
+            $user->update([
+                'password' => Hash::make($request->password),
+            ]);
+        }
+
+        return redirect()->route('dashboard.users.index')
+            ->with('success', 'User berhasil diupdate.');
+    }
 }
