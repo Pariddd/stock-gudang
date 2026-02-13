@@ -64,4 +64,23 @@ class UserController extends Controller
         return redirect()->route('dashboard.users.index')
             ->with('success', 'User berhasil diupdate.');
     }
+
+    public function destroy(User $user)
+    {
+        if ($user->role === 'admin') {
+            $adminCount = User::where('role', 'admin')->count();
+
+            if ($adminCount <= 1) {
+                return redirect()
+                    ->route('dashboard.users.index')
+                    ->with('error', 'Tidak dapat menghapus admin terakhir. Sistem harus memiliki minimal 1 admin.');
+            }
+        }
+
+        $user->delete();
+
+        return redirect()
+            ->route('dashboard.users.index')
+            ->with('success', 'User berhasil dihapus.');
+    }
 }
