@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StockHistoryController;
 use App\Http\Controllers\StockInController;
 use App\Http\Controllers\StockOutController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -30,4 +31,6 @@ Route::middleware(['auth'])
 
         Route::get('stock-history', [StockHistoryController::class, 'index'])->name('stock-history.index');
         Route::get('stock-history/fetch', [StockHistoryController::class, 'fetch'])->name('stock-history.fetch');
+
+        Route::resource('users', UserController::class)->except(['show']);
     });
