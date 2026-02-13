@@ -10,10 +10,9 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::latest()->paginate(10);
+        $users = User::orderBy('name')->paginate(10);
         return view('users.index', compact('users'));
     }
-
     public function create()
     {
         return view('users.create');
@@ -23,7 +22,7 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required|unique:users,name',
-            'password' => 'required|min:6',
+            'password' => 'required|min:8',
             'role' => 'required|in:admin,staff',
         ]);
 
